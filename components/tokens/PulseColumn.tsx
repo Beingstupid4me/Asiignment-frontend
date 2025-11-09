@@ -30,21 +30,69 @@ export function PulseColumn({
   const [activeFilter, setActiveFilter] = useState<string | null>("P1");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  // Handle scroll detection for lazy loading
+  // Sort tokens based on active filter
+  const sortedTokens = React.useMemo(() => {
+    const tokensCopy = [...tokens];
+    
+    switch (activeFilter) {
+      case "P1": // Sort by time (newest first)
+        return tokensCopy.sort((a, b) => {
+          const timeToSeconds = (timeStr: string) => {
+            const match = timeStr.match(/(\d+)([smh])/);
+            if (!match) return 0;
+            const value = parseInt(match[1]);
+            const unit = match[2];
+            if (unit === 's') return value;
+            if (unit === 'm') return value * 60;
+            if (unit === 'h') return value * 3600;
+            return 0;
+          };
+          return timeToSeconds(a.timeAgo) - timeToSeconds(b.timeAgo);
+        });
+      
+      case "P2": // Sort by market cap (highest first)
+        return tokensCopy.sort((a, b) => b.metrics.marketCap - a.metrics.marketCap);
+      
+      case "P3": // Sort by volume (highest first)
+        return tokensCopy.sort((a, b) => b.metrics.volume - a.metrics.volume);
+      
+      default:
+        return tokensCopy;
+    }
+  }, [tokens, activeFilter]);
+
+  // Intersection Observer for progressive loading
+  useEffect(() => {
+    const target = observerTarget.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading && !isLoadingMore) {
+          // Simulate loading more data
+          setIsLoadingMore(true);
+          setTimeout(() => {
+            console.log("Load more tokens for", type);
+            setIsLoadingMore(false);
+          }, 1000);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [type, isLoading, isLoadingMore]);
+
+  // Handle scroll detection for UI effects
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
-    
-    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-    const bottom = scrollHeight - scrollTop - clientHeight < 100;
-
-    if (bottom) {
-      // Trigger load more
-      console.log("Load more for", type);
-    }
-
+    const { scrollTop } = scrollRef.current;
     setIsScrolling(scrollTop > 0);
-  }, [type]);
+  }, []);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
@@ -107,30 +155,46 @@ export function PulseColumn({
           Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#0f0f0f] border border-gray-800/40 rounded-md p-2 animate-pulse h-[90px]"
+              className="bg-[#0f0f0f] border border-gray-800/40 rounded-md p-2 h-[90px] overflow-hidden relative"
             >
-              <div className="flex gap-2 h-full">
-                <div className="w-16 h-16 bg-gray-800 rounded-md" />
+              <div className="absolute inset-0 shimmer" />
+              <div className="flex gap-2 h-full relative z-10">
+                <div className="w-16 h-16 bg-gray-800/50 rounded-md" />
                 <div className="flex-1 space-y-1.5">
-                  <div className="h-2.5 bg-gray-800 rounded w-3/4" />
-                  <div className="h-2 bg-gray-800 rounded w-1/2" />
-                  <div className="h-2 bg-gray-800 rounded w-2/3" />
+                  <div className="h-2.5 bg-gray-800/50 rounded w-3/4" />
+                  <div className="h-2 bg-gray-800/50 rounded w-1/2" />
+                  <div className="h-2 bg-gray-800/50 rounded w-2/3" />
                 </div>
               </div>
             </div>
           ))
-        ) : tokens.length === 0 ? (
+        ) : sortedTokens.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <p className="text-sm">No tokens found</p>
           </div>
         ) : (
-          tokens.map((token) => (
-            <TokenCard
-              key={token.id}
-              tokenPair={token}
-              onBuy={onBuyToken}
-            />
-          ))
+          <>
+            {sortedTokens.map((token) => (
+              <TokenCard
+                key={token.id}
+                tokenPair={token}
+                onBuy={onBuyToken}
+              />
+            ))}
+            
+            {/* Intersection Observer Target for Progressive Loading */}
+            <div ref={observerTarget} className="h-4" />
+            
+            {/* Loading More Indicator */}
+            {isLoadingMore && (
+              <div className="flex items-center justify-center py-4">
+                <div className="flex items-center gap-2 text-gray-500">
+                  <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm">Loading more...</span>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

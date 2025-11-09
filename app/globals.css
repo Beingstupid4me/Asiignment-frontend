@@ -81,6 +81,15 @@ body {
   animation: shimmer 2s infinite linear;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 /* Smooth color transitions */
 .price-up {
   animation: priceUp 0.3s ease-out;

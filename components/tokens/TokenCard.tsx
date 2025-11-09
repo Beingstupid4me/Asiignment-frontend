@@ -3,11 +3,12 @@
 import React, { memo, useEffect, useState } from "react";
 import { 
   Eye, EyeOff, RefreshCw, Globe, Link2, Search, 
-  Users, TrendingUp, Award, Crown 
+  Users, TrendingUp, Award, Crown, MoreVertical 
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { SolButton } from "./SolButton";
+import { TokenActionMenu } from "./TokenActionMenu";
 import type { TokenPair } from "@/types/token";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/utils";
@@ -190,9 +191,20 @@ export const TokenCard = memo(function TokenCard({
         {/* Right Section - Financial Data & CTA */}
         <div className="flex flex-col items-end justify-between py-1.5 pr-2 pl-1.5 border-l border-gray-800/40">
           <div className="flex flex-col items-end gap-0.5">
+            {/* Menu Button */}
+            <TokenActionMenu token={tokenPair} onBuy={(id) => onBuy?.(tokenPair)}>
+              <button className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center text-gray-600 hover:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                <MoreVertical className="w-3.5 h-3.5" />
+              </button>
+            </TokenActionMenu>
+
             <div className="text-right">
               <div className="text-[11px] text-gray-500 uppercase">MC</div>
-              <div className="text-blue-400 font-bold text-sm whitespace-nowrap">
+              <div className={`font-bold text-sm whitespace-nowrap transition-colors duration-300 ${
+                priceFlash === 'up' ? 'text-green-400' : 
+                priceFlash === 'down' ? 'text-red-400' : 
+                'text-blue-400'
+              }`}>
                 {formatPrice(metrics.marketCap)}
               </div>
             </div>

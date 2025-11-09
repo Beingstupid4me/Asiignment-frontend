@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PulseColumn } from "@/components/tokens/PulseColumn";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { generateMockData, MockWebSocket } from "@/lib/mock-data";
 import type { TokenPair, ColumnType } from "@/types/token";
 import { HelpCircle, List, BarChart3, Volume2, Settings as SettingsIcon } from "lucide-react";
@@ -99,35 +100,41 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[calc(100vh-160px)]">
           {/* Column 1 - New Pairs */}
           <div className="border-r border-gray-800 h-full overflow-hidden flex flex-col">
-            <PulseColumn
-              title="New Pairs"
-              type="new-pairs"
-              tokens={tokens["new-pairs"]}
-              onBuyToken={handleBuyToken}
-              isLoading={isLoading}
-            />
+            <ErrorBoundary>
+              <PulseColumn
+                title="New Pairs"
+                type="new-pairs"
+                tokens={tokens["new-pairs"]}
+                onBuyToken={handleBuyToken}
+                isLoading={isLoading}
+              />
+            </ErrorBoundary>
           </div>
 
           {/* Column 2 - Final Stretch */}
           <div className="border-r border-gray-800 h-full overflow-hidden flex flex-col">
-            <PulseColumn
-              title="Final Stretch"
-              type="final-stretch"
-              tokens={tokens["final-stretch"]}
-              onBuyToken={handleBuyToken}
-              isLoading={isLoading}
-            />
+            <ErrorBoundary>
+              <PulseColumn
+                title="Final Stretch"
+                type="final-stretch"
+                tokens={tokens["final-stretch"]}
+                onBuyToken={handleBuyToken}
+                isLoading={isLoading}
+              />
+            </ErrorBoundary>
           </div>
 
           {/* Column 3 - Migrated */}
           <div className="h-full overflow-hidden flex flex-col">
-            <PulseColumn
-              title="Migrated"
-              type="migrated"
-              tokens={tokens["migrated"]}
-              onBuyToken={handleBuyToken}
-              isLoading={isLoading}
-            />
+            <ErrorBoundary>
+              <PulseColumn
+                title="Migrated"
+                type="migrated"
+                tokens={tokens["migrated"]}
+                onBuyToken={handleBuyToken}
+                isLoading={isLoading}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </main>
