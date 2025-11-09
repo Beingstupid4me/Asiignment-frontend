@@ -61,42 +61,39 @@ export function PulseColumn({
         "sticky top-0 z-10 bg-[#0a0a0a] border-b border-gray-800 px-4 py-3 transition-shadow",
         isScrolling && "shadow-lg"
       )}>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400">{COLUMN_ICONS[type]}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-0">
             <h2 className="text-white font-semibold text-lg">{title}</h2>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors">
-              <Zap className="w-4 h-4" />
-              <span className="ml-1 text-xs">0</span>
+          <div className="flex gap-1">
+            <div className="flex items-center gap-0">
+                <button className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                <Zap className="w-4 h-4" />
+                <span className="ml-1 text-xs">0</span>
+                </button>
+            </div>
+            <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 bg-[#141414] rounded-md p-1">
+                {["P1", "P2", "P3"].map((filter) => (
+                    <button
+                    key={filter}
+                    onClick={() => setActiveFilter(filter)}
+                    className={cn(
+                        "px-2 py-1 text-xs font-medium rounded transition-colors",
+                        activeFilter === filter
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-400 hover:text-white"
+                    )}
+                    >
+                    {filter}
+                    </button>
+                ))}
+                </div>
+            </div>
+            <button className="text-gray-400 hover:text-white transition-colors">
+                <Settings className="w-4 h-4" />
             </button>
           </div>
-        </div>
-
-        {/* Filters */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <div className="flex items-center gap-1 bg-[#141414] rounded-md p-1">
-              {["P1", "P2", "P3"].map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={cn(
-                    "px-2 py-1 text-xs font-medium rounded transition-colors",
-                    activeFilter === filter
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-400 hover:text-white"
-                  )}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
-          </div>
-          <button className="text-gray-400 hover:text-white transition-colors">
-            <Settings className="w-4 h-4" />
-          </button>
         </div>
       </div>
 

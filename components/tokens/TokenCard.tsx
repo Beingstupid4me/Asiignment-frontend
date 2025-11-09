@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { 
   Eye, EyeOff, RefreshCw, Globe, Link2, Search, 
   Users, TrendingUp, Award, Crown 
@@ -23,9 +23,27 @@ export const TokenCard = memo(function TokenCard({
   onBuy,
 }: TokenCardProps) {
   const { token, metrics, price, priceChange, percentageChanges, timeAgo, solAmount, migrationRatio } = tokenPair;
+  const [priceFlash, setPriceFlash] = useState<"up" | "down" | null>(null);
+  const [prevPrice, setPrevPrice] = useState(price);
+
+  // Detect price changes and trigger flash animation
+  useEffect(() => {
+    if (price !== prevPrice) {
+      setPriceFlash(price > prevPrice ? "up" : "down");
+      setPrevPrice(price);
+      
+      // Clear flash after animation
+      const timer = setTimeout(() => setPriceFlash(null), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [price, prevPrice]);
 
   return (
-    <div className="group relative bg-[#0f0f0f] hover:bg-[#141414] border border-gray-800/40 hover:border-gray-700/60 rounded-md transition-all duration-200">
+    <div className={cn(
+      "group relative bg-[#0f0f0f] hover:bg-[#141414] border border-gray-800/40 hover:border-gray-700/60 rounded-md transition-all duration-200",
+      priceFlash === "up" && "bg-green-500/10 border-green-500/30",
+      priceFlash === "down" && "bg-red-500/10 border-red-500/30"
+    )}>
       <div className="flex items-center gap-0">
         {/* Left Action Icons */}
         <div className="flex flex-col items-center gap-0.5 px-1.5 py-1.5">
@@ -173,21 +191,21 @@ export const TokenCard = memo(function TokenCard({
         <div className="flex flex-col items-end justify-between py-1.5 pr-2 pl-1.5 border-l border-gray-800/40">
           <div className="flex flex-col items-end gap-0.5">
             <div className="text-right">
-              <div className="text-[9px] text-gray-500 uppercase">MC</div>
-              <div className="text-blue-400 font-bold text-xs whitespace-nowrap">
+              <div className="text-[11px] text-gray-500 uppercase">MC</div>
+              <div className="text-blue-400 font-bold text-sm whitespace-nowrap">
                 {formatPrice(metrics.marketCap)}
               </div>
             </div>
             
             <div className="text-right">
-              <div className="text-[9px] text-gray-500 uppercase">V</div>
-              <div className="text-gray-300 font-medium text-[10px] whitespace-nowrap">
+              <div className="text-[11px] text-gray-500 uppercase">V</div>
+              <div className="text-gray-300 font-medium text-xs whitespace-nowrap">
                 {formatPrice(metrics.volume)}
               </div>
             </div>
 
             {/* Liquidity & TX Info */}
-            <div className="text-right text-[9px] text-gray-500">
+            <div className="text-right text-[11px] text-gray-500">
               <div className="flex items-center gap-0.5 justify-end">
                 <span>F</span>
                 <span className="text-white font-medium">≡ {price.toFixed(1)}</span>
@@ -203,7 +221,7 @@ export const TokenCard = memo(function TokenCard({
           <SolButton
             amount={solAmount}
             onClick={() => onBuy?.(tokenPair)}
-            className="w-full h-6 text-[10px] px-2"
+            className="w-full h-6 text-xs px-2"
           />
         </div>
       </div>

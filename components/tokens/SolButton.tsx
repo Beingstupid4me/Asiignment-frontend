@@ -16,11 +16,11 @@ export function SolButton({ amount, onClick, className }: SolButtonProps) {
     <Button
       onClick={onClick}
       className={cn(
-        "h-6 px-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-medium rounded-full transition-all flex items-center gap-1",
+        "h-6 px-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-full transition-all flex items-center gap-1",
         className
       )}
     >
-      <Zap className="w-2.5 h-2.5 fill-white" />
+      <Zap className="w-3.5 h-3.5 fill-white" />
       <span>{amount} SOL</span>
     </Button>
   );

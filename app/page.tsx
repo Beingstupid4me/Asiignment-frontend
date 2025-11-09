@@ -57,16 +57,8 @@ export default function Home() {
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                <h1 className="text-2xl font-bold text-white flex items-center my-4">
                   Pulse
-                  <span className="flex items-center gap-1">
-                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-blue-500 rounded flex items-center justify-center">
-                      ≡
-                    </div>
-                    <div className="w-6 h-6 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-500">
-                      🏆
-                    </div>
-                  </span>
                 </h1>
               </div>
               
