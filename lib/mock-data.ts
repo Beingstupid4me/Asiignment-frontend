@@ -1,22 +1,23 @@
 import type { Token, TokenPair, ColumnType } from "@/types/token";
 
 const tokenNames = [
-  "Brady Red Pill Mr Beast",
-  "crazy i just found something crazy",
-  "DAKOTA",
-  "bundlecoin i just found something crazy",
-  "El Jefe El Jefe Pequeno",
+  "Keep4o",
+  "petitions",
+  "BANANA",
+  "1TRENCH",
+  "Putrana",
+  "El Jefe",
   "xAI",
-  "Experiment The Mushroom Experiment",
-  "GIGA GIGA COIN",
-  "Tiberius Tiberius Coin",
-  "ZOLANACHAN Zolana-Chan",
-  "MrBeast2.0 Brady Penfield",
+  "Experiment",
+  "SACHI",
+  "SORE",
+  "squidward",
+  "Nostalgia",
 ];
 
-const tokenSymbols = ["BRADY", "CRAZY", "DAKOTA", "BUNDLE", "JEFE", "XAI", "SHRM", "GIGA", "TIB", "ZOLA", "BEAST"];
+const tokenSymbols = ["4o", "petitions", "BANANA", "1TRENCH", "Putrana", "JEFE", "XAI", "SHRM", "SACHI", "SORE", "squidward", "Nostalgia"];
 
-const contractPrefixes = ["FrGY", "5D9s", "HAc4", "6co8", "DfaZ", "9byn", "03EH", "5Q3a", "3Jzq", "Cf3H"];
+const contractPrefixes = ["H9Zj", "rZ83", "EfvE", "CL8g", "HAc4", "DfaZ", "9byn", "5uPm", "Gx2Q", "ud8x"];
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,14 +32,15 @@ function randomChoice<T>(arr: T[]): T {
 }
 
 function generateToken(index: number): Token {
+  const nameIndex = index % tokenNames.length;
   return {
     id: `token-${index}`,
-    name: tokenNames[index % tokenNames.length],
-    symbol: tokenSymbols[index % tokenSymbols.length],
-    ticker: tokenSymbols[index % tokenSymbols.length],
-    imageUrl: `https://api.dicebear.com/7.x/shapes/svg?seed=${index}&backgroundColor=1e293b`,
-    contractAddress: `${contractPrefixes[index % contractPrefixes.length]}_${randomChoice(["pump", "yMko", "rB6V", "qwrx"])}`,
-    createdAt: new Date(Date.now() - randomInt(0, 86400000)), // Within last 24h
+    name: tokenNames[nameIndex],
+    symbol: tokenSymbols[nameIndex],
+    ticker: tokenSymbols[nameIndex].replace(/\s+/g, ''),
+    imageUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=${index}&backgroundColor=1e293b,334155,475569`,
+    contractAddress: `${contractPrefixes[index % contractPrefixes.length]}...${randomChoice(["pump", "yMko", "PHbf", "BNKU", "bond", "SPDk", "aoV6"])}`,
+    createdAt: new Date(Date.now() - randomInt(0, 86400000)),
   };
 }
 
@@ -50,12 +52,14 @@ function generateTimeAgo(): string {
 }
 
 function generatePercentageChanges() {
+  // Generate 5 percentage changes with varied values
   return [
-    { value: randomFloat(-50, 50), timeframe: "5m" },
-    { value: randomFloat(-30, 70), timeframe: "1h" },
-    { value: randomFloat(-20, 100), timeframe: "6h" },
-    { value: randomFloat(-10, 150), timeframe: "24h" },
-  ].slice(0, randomInt(2, 4));
+    { value: randomFloat(-40, 30), timeframe: "" },     // User concentration
+    { value: randomFloat(-5, 5), timeframe: "2mo" },    // Lock/vesting
+    { value: randomFloat(-5, 15), timeframe: "" },      // Tax/fee
+    { value: randomFloat(-2, 2), timeframe: "" },       // Mint function
+    { value: randomFloat(-60, 60), timeframe: "" },     // Ownership
+  ];
 }
 
 export function generateTokenPair(index: number, category: ColumnType): TokenPair {

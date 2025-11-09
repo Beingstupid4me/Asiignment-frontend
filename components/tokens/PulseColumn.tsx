@@ -103,19 +103,19 @@ export function PulseColumn({
       {/* Scrollable Content */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin"
+        className="flex-1 overflow-y-auto px-3 py-2 space-y-2 scrollbar-thin"
       >
         {isLoading ? (
           // Loading skeleton
-          Array.from({ length: 3 }).map((_, i) => (
+          Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#141414] border border-gray-800/50 rounded-lg p-3 animate-pulse"
+              className="bg-[#0f0f0f] border border-gray-800/40 rounded-lg p-3 animate-pulse"
             >
               <div className="flex gap-3">
-                <div className="w-14 h-14 bg-gray-800 rounded-sm" />
+                <div className="w-20 h-20 bg-gray-800 rounded-lg" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-800 rounded w-3/4" />
+                  <div className="h-3 bg-gray-800 rounded w-3/4" />
                   <div className="h-3 bg-gray-800 rounded w-1/2" />
                   <div className="h-3 bg-gray-800 rounded w-2/3" />
                 </div>
