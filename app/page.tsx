@@ -103,9 +103,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Three Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 h-[calc(100vh-160px)]">
-          <div className="border-r border-gray-800">
+        {/* Three Column Layout - Each with independent scroll */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[calc(100vh-160px)]">
+          {/* Column 1 - New Pairs */}
+          <div className="border-r border-gray-800 h-full overflow-hidden flex flex-col">
             <PulseColumn
               title="New Pairs"
               type="new-pairs"
@@ -114,7 +115,9 @@ export default function Home() {
               isLoading={isLoading}
             />
           </div>
-          <div className="border-r border-gray-800">
+
+          {/* Column 2 - Final Stretch */}
+          <div className="border-r border-gray-800 h-full overflow-hidden flex flex-col">
             <PulseColumn
               title="Final Stretch"
               type="final-stretch"
@@ -123,7 +126,9 @@ export default function Home() {
               isLoading={isLoading}
             />
           </div>
-          <div>
+
+          {/* Column 3 - Migrated */}
+          <div className="h-full overflow-hidden flex flex-col">
             <PulseColumn
               title="Migrated"
               type="migrated"

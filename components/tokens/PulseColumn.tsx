@@ -107,17 +107,17 @@ export function PulseColumn({
       >
         {isLoading ? (
           // Loading skeleton
-          Array.from({ length: 5 }).map((_, i) => (
+          Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#0f0f0f] border border-gray-800/40 rounded-lg p-3 animate-pulse"
+              className="bg-[#0f0f0f] border border-gray-800/40 rounded-md p-2 animate-pulse h-[90px]"
             >
-              <div className="flex gap-3">
-                <div className="w-20 h-20 bg-gray-800 rounded-lg" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-3 bg-gray-800 rounded w-3/4" />
-                  <div className="h-3 bg-gray-800 rounded w-1/2" />
-                  <div className="h-3 bg-gray-800 rounded w-2/3" />
+              <div className="flex gap-2 h-full">
+                <div className="w-16 h-16 bg-gray-800 rounded-md" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-2.5 bg-gray-800 rounded w-3/4" />
+                  <div className="h-2 bg-gray-800 rounded w-1/2" />
+                  <div className="h-2 bg-gray-800 rounded w-2/3" />
                 </div>
               </div>
             </div>
