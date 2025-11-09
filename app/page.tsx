@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PulseColumn } from "@/components/tokens/PulseColumn";
@@ -23,29 +23,45 @@ export default function Home() {
     setTokens(mockData);
     setIsLoading(false);
 
-    // Setup WebSocket simulation for real-time updates
+    // Setup WebSocket simulation for real-time updates with batching
     const ws = new MockWebSocket();
-    ws.connect((updates) => {
+    let updateQueue: TokenPair[] = [];
+    let timeoutId: NodeJS.Timeout;
+
+    const flushUpdates = () => {
+      if (updateQueue.length === 0) return;
+      
       setTokens((prev) => {
         const newTokens = { ...prev };
-        updates.forEach((update) => {
+        updateQueue.forEach((update) => {
           // Add new token to the top of its category
           newTokens[update.category] = [
             update,
             ...newTokens[update.category].slice(0, 19), // Keep max 20 items
           ];
         });
+        updateQueue = [];
         return newTokens;
       });
+    };
+
+    ws.connect((updates) => {
+      // Batch updates every 100ms to reduce re-renders
+      updateQueue.push(...updates);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(flushUpdates, 100);
     });
 
-    return () => ws.disconnect();
+    return () => {
+      ws.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, []);
 
-  const handleBuyToken = (token: TokenPair) => {
+  const handleBuyToken = useCallback((token: TokenPair) => {
     console.log("Buy token:", token);
     // Implement buy logic
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col">

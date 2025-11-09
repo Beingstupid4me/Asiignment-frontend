@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover";
-import { TokenDetailsModal } from "./TokenDetailsModal";
 import { 
   ShoppingCart, 
   TrendingUp, 
@@ -14,6 +14,12 @@ import {
   Info 
 } from "lucide-react";
 import { TokenPair } from "@/types/token";
+
+// Lazy load the modal since it's only needed when user clicks
+const TokenDetailsModal = dynamic(
+  () => import("./TokenDetailsModal").then(mod => ({ default: mod.TokenDetailsModal })),
+  { ssr: false }
+);
 
 interface TokenActionMenuProps {
   token: TokenPair;

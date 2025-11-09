@@ -79,6 +79,7 @@ body {
   );
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
+  will-change: background-position;
 }
 
 @keyframes shimmer {
@@ -93,10 +94,12 @@ body {
 /* Smooth color transitions */
 .price-up {
   animation: priceUp 0.3s ease-out;
+  will-change: background-color;
 }
 
 .price-down {
   animation: priceDown 0.3s ease-out;
+  will-change: background-color;
 }
 
 @keyframes priceUp {

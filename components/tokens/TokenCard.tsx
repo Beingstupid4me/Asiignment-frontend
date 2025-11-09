@@ -40,11 +40,14 @@ export const TokenCard = memo(function TokenCard({
   }, [price, prevPrice]);
 
   return (
-    <div className={cn(
-      "group relative bg-[#0f0f0f] hover:bg-[#141414] border border-gray-800/40 hover:border-gray-700/60 rounded-md transition-all duration-200",
-      priceFlash === "up" && "bg-green-500/10 border-green-500/30",
-      priceFlash === "down" && "bg-red-500/10 border-red-500/30"
-    )}>
+    <div 
+      className={cn(
+        "group relative bg-[#0f0f0f] hover:bg-[#141414] border border-gray-800/40 hover:border-gray-700/60 rounded-md transition-all duration-200",
+        priceFlash === "up" && "bg-green-500/10 border-green-500/30",
+        priceFlash === "down" && "bg-red-500/10 border-red-500/30"
+      )}
+      style={{ contentVisibility: 'auto' }}
+    >
       <div className="flex items-center gap-0">
         {/* Left Action Icons */}
         <div className="flex flex-col items-center gap-0.5 px-1.5 py-1.5">
@@ -238,5 +241,13 @@ export const TokenCard = memo(function TokenCard({
         </div>
       </div>
     </div>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for better memo performance
+  return (
+    prevProps.tokenPair.id === nextProps.tokenPair.id &&
+    prevProps.tokenPair.price === nextProps.tokenPair.price &&
+    prevProps.tokenPair.metrics.marketCap === nextProps.tokenPair.metrics.marketCap &&
+    prevProps.tokenPair.metrics.volume === nextProps.tokenPair.metrics.volume
   );
 });

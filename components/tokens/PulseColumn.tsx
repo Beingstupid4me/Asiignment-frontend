@@ -98,7 +98,8 @@ export function PulseColumn({
     const scrollElement = scrollRef.current;
     if (!scrollElement) return;
 
-    scrollElement.addEventListener("scroll", handleScroll);
+    // Use passive event listener for better scroll performance
+    scrollElement.addEventListener("scroll", handleScroll, { passive: true });
     return () => scrollElement.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
